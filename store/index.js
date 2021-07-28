@@ -1,37 +1,18 @@
-let form_data = window.localStorage.getItem('form_data');
-
-
-
 export const state = () => ({
-    state: {
-        form_data: form_data ? JSON.parse(form_data) : [],
-        mspr: ''
-    },
+  payload: 
+  window.localStorage.getItem('form_data') ? JSON.parse(window.localStorage.getItem('form_data')) : {
+  msrp: 0,
+  dealer_discount: 0,
+  rebates:0,
+  down_das:0,
+  sale_price:0,
+  term:"60",
+},
+})
 
-
-
-    mutations:{
-
-        setmspr(state,payload) {
-            state.mspr = payload
-        },
-
-      saveData(state){
-        window.localStorage.setItem('form_data', JSON.stringify(state.form_data));
-      },
-
-      clearData(){
-
-          window.localStorage.clear();
-
-        this.commit('saveData');
-
-      },
-
-
-      
-
-
-    }
-    
-  })
+export const mutations = {
+  setData(state, payload){
+    state.payload = payload
+    window.localStorage.setItem('form_data', JSON.stringify(state.payload));
+  },
+}

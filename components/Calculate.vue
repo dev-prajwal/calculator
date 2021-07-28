@@ -1,24 +1,39 @@
 <template>
     <div class="container">
-        <b-form-input
-        v-model.number="msrp"
-        placeholder="Enter MSRP"
-        ></b-form-input>
 
-        <b-form-input
-        v-model.number="dealer_discount"
-        placeholder="Enter Dealer Discount"
-        ></b-form-input>
+        <b-form-group id="msrp" label="MSRP:" label-for="msrp">
+          <b-form-input
+          v-model.number="msrp"
+          placeholder="Enter MSRP"
+          type="number"
+          @change="addStore"
+          ></b-form-input>
+        </b-form-group>
 
-        <b-form-input
-        v-model.number="rebates"
-        placeholder="Enter Rebates"
-        ></b-form-input>
+        <b-form-group id="dealer_discount" label="Dealer Discount:" label-for="dealer_discount">
+          <b-form-input
+          v-model.number="dealer_discount"
+          placeholder="Enter Dealer Discount"
+          type="number"
+          
+          ></b-form-input>
+        </b-form-group>
 
-        <b-form-input
-        v-model.number="down_das"
-        placeholder="Enter Down / DAS"
-        ></b-form-input>
+        <b-form-group id="rebates" label="Rebates:" label-for="rebates">
+          <b-form-input
+          v-model.number="rebates"
+          placeholder="Enter Rebates"
+          type="number"
+          ></b-form-input>
+        </b-form-group>
+
+        <b-form-group id="down_das" label="DOWN / DAS:" label-for="down_das">
+          <b-form-input
+          v-model.number="down_das"
+          placeholder="Enter Down / DAS"
+          type="number"
+          ></b-form-input>
+        </b-form-group>
 
         <div>
             <div class="mt-3">Term: <strong>{{ term }}</strong></div>
@@ -26,73 +41,100 @@
             
         </div>
 
-        <b-form-input
-        v-model.number="sale_price"
-        placeholder="Enter Sale Price"
-        ></b-form-input>
+        <b-form-group id="sale_price" label="Sale Price:" label-for="sale_price">
+          <b-form-input
+          v-model.number="sale_price"
+          placeholder="Enter Sale Price"
+          type="number"
+          ></b-form-input>
+        </b-form-group>
 
-        <b-form-input
-        v-model.number="financed_amount"
-        placeholder="Enter Financed Amount"
-        ></b-form-input>
+        <b-form-group id="financed_amount" label="Financed Amount:" label-for="financed_amount">
+          <b-form-input
+          v-model.number="financed_amount"
+          placeholder="Enter Financed Amount"
+          type="number"
+          disabled
+          ></b-form-input>
+        </b-form-group>
 
-        <b-form-input
-        v-model.number="money_factor"
-        placeholder="Enter Money Factor"
-        ></b-form-input>
+        
+        <h4>Money Factor: 0.000125</h4>
 
-        <b-form-input
-        v-model.number="tax"
-        placeholder="Enter Tax"
-        ></b-form-input>
+        <h4>Tax: 0.09</h4>
 
-        <b-form-input
-        v-model.number="residual"
-        placeholder="Enter Residual"
-        ></b-form-input>
+        <h4>Residual: 0.55</h4>
 
-        <b-form-input
-        v-model.number="residual_value"
-        placeholder="Enter Residual Value"
-        ></b-form-input>
+        <b-form-group id="residual_value" label="Residual Value:" label-for="residual_value">
+          <b-form-input
+          v-model.number="residual_value"
+          type="number"
+          placeholder="Enter Residual Value"
+          disabled
+          ></b-form-input>
+        </b-form-group>
 
-        <b-form-input
-        v-model.number="amortized"
-        placeholder="Enter Amortized"
-        ></b-form-input>
+        <b-form-group id="amortized" label="Amortized:" label-for="amortized">
+          <b-form-input
+          v-model.number="amortized"
+          type="number"
+          placeholder="Enter Amortized"
+          disabled
+          ></b-form-input>
+        </b-form-group>
 
-        <b-form-input
-        v-model.number="monthly_depreciation"
-        placeholder="Enter Monthly Depreciation"
-        ></b-form-input>
+        <b-form-group id="monthly_depreciation" label="Monthly Depreciation:" label-for="monthly_depreciation">
+          <b-form-input
+          v-model.number="monthly_depreciation"
+          type="number"
+          placeholder="Enter Monthly Depreciation"
+          disabled
+          ></b-form-input>
+        </b-form-group>
 
-        <b-form-input
-        v-model.number="monthly_interest"
-        placeholder="Enter Monthly interest"
-        ></b-form-input>
+        <b-form-group id="monthly_interest" label="Monthly interest:" label-for="monthly_interest">
+          <b-form-input
+          v-model.number="monthly_interest"
+          type="number"
+          placeholder="Enter Monthly interest"
+          disabled
+          ></b-form-input>
+        </b-form-group>
 
-        <b-form-input
-        v-model.number="monthly_tax"
-        placeholder="Enter Monthly tax"
-        ></b-form-input>
+        <b-form-group id="monthly_tax" label="Monthly Tax:" label-for="monthly_tax">
+          <b-form-input
+          v-model.number="monthly_tax"
+          type="number"
+          placeholder="Enter Monthly tax"
+          disabled
+          ></b-form-input>
+        </b-form-group>
 
-        <b-form-input
-        v-model.number="lease_payment"
-        placeholder="Enter Lease Payment"
-        ></b-form-input>
+        <b-form-group id="lease_payment" label="Lease Payment:" label-for="lease_payment">
+          <b-form-input
+          v-model.number="lease_payment"
+          placeholder="Enter Lease Payment"
+          type="number"
+          disabled
+          ></b-form-input>
+        </b-form-group>
 
+        <b-button variant="outline-primary" @click="addStore">SAVE</b-button>
         
     </div>
 </template>
 
 <script>
+
+import { mapMutations } from 'vuex'
+
     export default {
         data() {
             return {
                 msrp: '',dealer_discount: '',rebates:'',down_das:'',sale_price:'',financed_amount:'',
-                term:'',money_factor:'',tax:'',residual:'',residual_value:'',amortized:'',monthly_depreciation:'',
+                money_factor: 0.000125,tax: 0.09,residual: 0.55,residual_value:'',amortized:'',monthly_depreciation:'',
                 monthly_interest:'',monthly_tax:'',lease_payment:'',
-                selected: null,
+                term: null,
                 options: [
                 { value: null, text: 'Please select an option' },
                 { value: 12, text: '12' },
@@ -102,11 +144,11 @@
                 { value: 60, text: '60' },
                 { value: 72, text: '72' }
                 ]
+              
             }
         },
         
         methods: {
-
 
             dealer_discount_cal() {
                 let dd = Number(this.msrp) - Number(this.sale_price) - Number(this.rebates)
@@ -142,30 +184,39 @@
              lease_payment_cal() {
                let lp = (this.monthly_depreciation) + (this.monthly_interest) + (this.monthly_tax)
                this.lease_payment = (lp > 0) ? Math.round(lp) : 0
-             }
+               
+             },
+             addStore() {
+               this.$store.commit('setData', {
+                 msrp: this.msrp,
+                 dealer_discount: this.dealer_discount,
+                 rebates:this.rebates,
+                 down_das:this.down_das,
+                 sale_price:this.sale_price,                
+                 term: this.term,
+               })
+             },
+            
         },
         watch: {
             sale_price: function (val) {
                 this.dealer_discount_cal();
                 this.financed_amt();
-            },
-            residual: function(val) {
-              this.residual_val();
-            },
-            residual_value: function (val) {
-              this.amortized_cal();
-             
-            },
-            amortized: function (val) {
-              this.monthly_depreciation_cal()
-              this.monthly_interest_cal();
-            },
-            monthly_interest: function (val) {
-              this.monthly_tax_cal()
-            },
-            monthly_tax: function (val) {
-              this.lease_payment_cal()
+                this.residual_val();
+                this.amortized_cal();
+                this.monthly_depreciation_cal()
+                this.monthly_interest_cal();
+                this.monthly_tax_cal()
+                this.lease_payment_cal()
             }
+        },
+        mounted() {
+          this.msrp = this.$store.state.payload.msrp
+          this.dealer_discount = this.$store.state.payload.dealer_discount
+          this.rebates = this.$store.state.payload.rebates
+          this.down_das = this.$store.state.payload.down_das
+          this.sale_price = this.$store.state.payload.sale_price
+          this.term = this.$store.state.payload.term
         }
     }
 </script>
