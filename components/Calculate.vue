@@ -49,75 +49,27 @@
           ></b-form-input>
         </b-form-group>
 
-        <b-form-group id="financed_amount" label="Financed Amount:" label-for="financed_amount">
-          <b-form-input
-          v-model.number="financed_amount"
-          placeholder="Enter Financed Amount"
-          type="number"
-          disabled
-          ></b-form-input>
-        </b-form-group>
-
         
+        <h4>Financed Amount: ${{financed_amount}}</h4>
+
         <h4>Money Factor: 0.000125</h4>
 
         <h4>Tax: 0.09</h4>
 
         <h4>Residual: 0.55</h4>
 
-        <b-form-group id="residual_value" label="Residual Value:" label-for="residual_value">
-          <b-form-input
-          v-model.number="residual_value"
-          type="number"
-          placeholder="Enter Residual Value"
-          disabled
-          ></b-form-input>
-        </b-form-group>
+        <h4>Residual Value: ${{residual_value}}</h4>
 
-        <b-form-group id="amortized" label="Amortized:" label-for="amortized">
-          <b-form-input
-          v-model.number="amortized"
-          type="number"
-          placeholder="Enter Amortized"
-          disabled
-          ></b-form-input>
-        </b-form-group>
+        <h4>Amortized: ${{amortized}}</h4>
 
-        <b-form-group id="monthly_depreciation" label="Monthly Depreciation:" label-for="monthly_depreciation">
-          <b-form-input
-          v-model.number="monthly_depreciation"
-          type="number"
-          placeholder="Enter Monthly Depreciation"
-          disabled
-          ></b-form-input>
-        </b-form-group>
+        <h4>Monthly Depreciation: ${{monthly_depreciation}}</h4>
 
-        <b-form-group id="monthly_interest" label="Monthly interest:" label-for="monthly_interest">
-          <b-form-input
-          v-model.number="monthly_interest"
-          type="number"
-          placeholder="Enter Monthly interest"
-          disabled
-          ></b-form-input>
-        </b-form-group>
+        <h4>Monthly interest: ${{monthly_interest}}</h4>
 
-        <b-form-group id="monthly_tax" label="Monthly Tax:" label-for="monthly_tax">
-          <b-form-input
-          v-model.number="monthly_tax"
-          type="number"
-          placeholder="Enter Monthly tax"
-          disabled
-          ></b-form-input>
-        </b-form-group>
+        <h4>Monthly tax: ${{monthly_tax}}</h4>
 
-        <b-form-group id="lease_payment" label="Lease Payment:" label-for="lease_payment">
-          <b-form-input
-          v-model.number="lease_payment"
-          placeholder="Enter Lease Payment"
-          type="number"
-          disabled
-          ></b-form-input>
-        </b-form-group>
+        <h4>Lease Payment: ${{lease_payment}}</h4>
+
 
         <b-button variant="outline-primary" @click="addStore">SAVE</b-button>
         
@@ -150,42 +102,41 @@ import { mapMutations } from 'vuex'
         
         methods: {
 
-            dealer_discount_cal() {
-                let dd = Number(this.msrp) - Number(this.sale_price) - Number(this.rebates)
-                this.dealer_discount = (dd > 0) ? dd : 0
-                
-            },
-            financed_amt() {
+            calculate_all()
+            {
+              //dealer discount
+              let dd = Number(this.msrp) - Number(this.sale_price) - Number(this.rebates)
+              this.dealer_discount = (dd > 0) ? dd : 0
+
+              //financed amount
               let fa = Number(this.sale_price) - Number(this.down_das)
               this.financed_amount = (fa > 0) ? fa : 0
-            },
-            residual_val() {
+
+              //residual amount
               let rv = Number(this.msrp) * this.residual
-              console.log(rv)
               this.residual_value = (rv > 0) ? rv : 0
-              console.log(this.term)
-            },
-            amortized_cal() {
+
+              //amortized value
               let am = Number(this.financed_amount) - Number(this.residual_value)
               this.amortized = (am > 0) ? am : 0
+
+              //monthly depreciation
+              let md = Number(this.amortized) / Number(this.term)
+              this.monthly_depreciation = (md.toFixed(2) > 0) ? md : 0
+
+              //monthly intrest
+              let mi = (Number(this.financed_amount) + Number(this.residual_value))* this.money_factor
+              this.monthly_interest = (mi > 0) ? mi : 0
+
+              //monthly tax
+              let mt = ((this.monthly_depreciation) + (this.monthly_interest))* (this.tax)
+              this.monthly_tax = (mt > 0) ? mt : 0
+
+              //Lease Payment
+              let lp = (this.monthly_depreciation) + (this.monthly_interest) + (this.monthly_tax)
+              this.lease_payment = (lp > 0) ? Math.round(lp) : 0
             },
-            monthly_depreciation_cal() {
-                let md = Number(this.amortized) / Number(this.term)
-                this.monthly_depreciation = (md.toFixed(2) > 0) ? md : 0
-             },
-             monthly_interest_cal() {
-                let mi = (Number(this.financed_amount) + Number(this.residual_value))* this.money_factor
-                this.monthly_interest = (mi > 0) ? mi : 0
-             },
-             monthly_tax_cal() {
-                let mt = ((this.monthly_depreciation) + (this.monthly_interest))* (this.tax)
-                this.monthly_tax = (mt > 0) ? mt : 0
-             },
-             lease_payment_cal() {
-               let lp = (this.monthly_depreciation) + (this.monthly_interest) + (this.monthly_tax)
-               this.lease_payment = (lp > 0) ? Math.round(lp) : 0
-               
-             },
+            
              addStore() {
                this.$store.commit('setData', {
                  msrp: this.msrp,
@@ -199,15 +150,21 @@ import { mapMutations } from 'vuex'
             
         },
         watch: {
+            
+            msrp: function (val) {
+                this.calculate_all()
+            },
+            rebates: function (val) {
+                this.calculate_all()
+            },
+            down_das: function (val) {
+                this.calculate_all()
+            },
+            term: function (val) {
+                this.calculate_all()
+            },
             sale_price: function (val) {
-                this.dealer_discount_cal();
-                this.financed_amt();
-                this.residual_val();
-                this.amortized_cal();
-                this.monthly_depreciation_cal()
-                this.monthly_interest_cal();
-                this.monthly_tax_cal()
-                this.lease_payment_cal()
+                this.calculate_all()
             }
         },
         mounted() {
@@ -225,6 +182,8 @@ import { mapMutations } from 'vuex'
 
 .container {
     width: 600px;
+    margin-top: 50px;
+    margin-bottom: 100px;
 }
 
 </style>
