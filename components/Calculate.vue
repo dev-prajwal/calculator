@@ -106,35 +106,36 @@ import { mapMutations } from 'vuex'
             {
               //dealer discount
               let dd = Number(this.msrp) - Number(this.sale_price) - Number(this.rebates)
-              this.dealer_discount = (dd > 0) ? dd : 0
+              //this.dealer_discount = (dd > 0) ? dd : 0
+              this.dealer_discount = dd
 
               //financed amount
               let fa = Number(this.sale_price) - Number(this.down_das)
-              this.financed_amount = (fa > 0) ? fa : 0
+              this.financed_amount = fa//(fa > 0) ? fa : 0
 
               //residual amount
               let rv = Number(this.msrp) * this.residual
-              this.residual_value = (rv > 0) ? rv : 0
+              this.residual_value = rv//(rv > 0) ? rv : 0
 
               //amortized value
               let am = Number(this.financed_amount) - Number(this.residual_value)
-              this.amortized = (am > 0) ? am : 0
+              this.amortized = am//(am > 0) ? am : 0
 
               //monthly depreciation
               let md = Number(this.amortized) / Number(this.term)
-              this.monthly_depreciation = (md.toFixed(2) > 0) ? md : 0
+              this.monthly_depreciation = md.toFixed(2)//(md.toFixed(2) > 0) ? md : 0
 
               //monthly intrest
               let mi = (Number(this.financed_amount) + Number(this.residual_value))* this.money_factor
-              this.monthly_interest = (mi > 0) ? mi : 0
+              this.monthly_interest = mi//(mi > 0) ? mi : 0
 
               //monthly tax
               let mt = ((this.monthly_depreciation) + (this.monthly_interest))* (this.tax)
-              this.monthly_tax = (mt > 0) ? mt : 0
+              this.monthly_tax = mt//(mt > 0) ? mt : 0
 
               //Lease Payment
               let lp = (this.monthly_depreciation) + (this.monthly_interest) + (this.monthly_tax)
-              this.lease_payment = (lp > 0) ? Math.round(lp) : 0
+              this.lease_payment =  Math.round(lp)//(lp > 0) ? Math.round(lp) : 0
             },
             
              addStore() {
