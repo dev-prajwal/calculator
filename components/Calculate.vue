@@ -123,7 +123,7 @@ import { mapMutations } from 'vuex'
 
               //monthly depreciation
               let md = Number(this.amortized) / Number(this.term)
-              this.monthly_depreciation = md.toFixed(2)//(md.toFixed(2) > 0) ? md : 0
+              this.monthly_depreciation = md//(md.toFixed(2) > 0) ? md : 0
 
               //monthly intrest
               let mi = (Number(this.financed_amount) + Number(this.residual_value))* this.money_factor
